@@ -2,17 +2,20 @@
 
 ### bitmap API
 
+##### main functions
 1. In our bitmap constructer, we have the following variables:
   - size: record the total amount of bits in the bitmmap
   - size_avail: record how many bits are still available to be set
   - memory: the array of bits
-2. In addition, we defined a check_bit() function to check if a specific bit is set.
-3. create(): we set size and size_avail to the parameter [nbits], then we malloc() for memory.
-4. destroy(): we free the array of bits first, then we free the entire bitmap struct.
-5. empty()/full(): we use the size_avail to check for available bits, saving time by making it O(1).
-6. any()/none()/all(): we go thourgh the array of bits and immidiately return if an invalid condition is met, making it O(n). Otherwise all bits meet the valid condition and return success
-7. set()/clr()/set_one()/cle_one(): we first check for error cases, then use the given macros to set the bits. We also modify the size_avail accordingly.
-8. In find_region(): we set a variable bits_avail = 0. We then loop through the array to see if there's a clear bit, and increment the bits_avail if that's the case, or reset it to 0 if we find a set bit. Once bit_avail is equal to the required space, we set the corresponding bits, set the position of the starting bits and return a success.
+2. create(): we set size and size_avail to the parameter [nbits], then we malloc() for memory.
+3. destroy(): we free the array of bits first, then we free the entire bitmap struct.
+4. empty()/full(): we use the size_avail to check for available bits, saving time by making it O(1).
+5. any()/none()/all(): we go thourgh the array of bits and immidiately return if an invalid condition is met, making it O(n). Otherwise all bits meet the valid condition and return success
+6. set()/clr()/set_one()/cle_one(): we first check for error cases, then use the given macros to set the bits. We also modify the size_avail accordingly.
+7. In find_region(): we set a variable bits_avail = 0. We then loop through the array to see if there's a clear bit, and increment the bits_avail if that's the case, or reset it to 0 if we find a set bit. Once bit_avail is equal to the required space, we set the corresponding bits, set the position of the starting bits and return a success.
+##### custom functions
+1. check_bit(int nr, volatile unsigned char *map): We check if the @nr bit of @map is set to 1. Return 1 if it's set and 0 if not.
+2. getMemory(bitmap_t bitmap): We return the array of bits of @bitmap.
 
 ### palloc API
 1. create(): we used mmap() to link the bitmap to the actual allocated address with protection PAGE_WR_ACCESS
