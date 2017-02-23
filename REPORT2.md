@@ -13,6 +13,7 @@
 5. any()/none()/all(): we go thourgh the array of bits and immidiately return if an invalid condition is met, making it O(n). Otherwise all bits meet the valid condition and return success
 6. set()/clr()/set_one()/cle_one(): we first check for error cases, then use the given macros to set the bits. We also modify the size_avail accordingly.
 7. In find_region(): we set a variable bits_avail = 0. We then loop through the array to see if there's a clear bit, and increment the bits_avail if that's the case, or reset it to 0 if we find a set bit. Once bit_avail is equal to the required space, we set the corresponding bits, set the position of the starting bits and return a success.
+
 ##### custom functions
 1. check_bit(int nr, volatile unsigned char *map): We check if the @nr bit of @map is set to 1. Return 1 if it's set and 0 if not.
 2. getMemory(bitmap_t bitmap): We return the array of bits of @bitmap.
