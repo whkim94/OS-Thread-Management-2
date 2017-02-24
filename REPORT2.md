@@ -24,3 +24,24 @@
 3. get_pages(): after checking for error cases, we used bitmap_find_region() to get the index of the page, then we return (the starting address ppool + index * PAGE_SIZE)
 4. free_pages(): we first find the difference between the address of the ptr passed in, and the address of the start of ppool.addr. Using the difference, we divide it by PAGE_SIZE to determine which page the ptr corresponds to and use bitmap_clr() to clear the corresponding bits.
 5. protect_pages(): we used mprotect() to set the memory protection as PAGE_NO_AcCESS
+
+### tls API
+1. In our tls structure, we have the following variables
+  - blocks: the map of what bytes are available
+	- blockSize: the amount of pages allocated for tls
+	- addr: the starting address of the actual data for tls
+2. create():
+  1. we malloc() for the tls structure
+  2. we set the addr topointer returned by palloc_get_pages(npages)
+  3. we malloc() for blocks
+  4. we set blockSize to @npages passed in by user
+3. destroy(): we free() all variables inside of the tls structure.
+4. open():
+5. close():
+6. alloc():
+  1. we check inside blocks to see if there's enough space to allocate @size Bytes
+  2. if there is, then we return the address of (addr+index of free space found)
+7. free():
+  1. we check if the address is in the list of allocated blocks
+    - if not, return -1
+    - if yes, clear the record in blocks and return 0
