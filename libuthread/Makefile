@@ -8,12 +8,12 @@ objs := queue.o context.o uthread.o semaphore.o preempt.o bitmap.o palloc.o tls.
 all: $(targets)
 
 libuthread.a: $(objs)
-	@echo "CC $@"
+	@echo "AR $@"
 	@ar rcs libuthread.a $^
 
 %.o: %.c %.h
 	@echo "CC $@"
-	@$(CC) $(CFLAGS) -c -o $@ queue.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 clean :
 	@echo "CLEAN"
