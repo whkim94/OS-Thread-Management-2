@@ -1,25 +1,20 @@
-all: libuthread.a
+CC := gcc
+CFLAGS := -Werror
+CFLAGS := -g
 
-libuthread.a: queue.o context.o uthread.o semaphore.o preempt.o bitmap.o
-	ar rcs libuthread.a $^
+targets := libuthread.a
+objs := queue.o context.o uthread.o semaphore.o preempt.o bitmap.o palloc.o tls.o
 
-queue.o: queue.c queue.h
-	gcc -Werror -c -o $@ queue.c
+all: $(targets)
 
-context.o: context.c context.h preempt.h uthread.h
-	gcc -Werror -c -o $@ context.c
+libuthread.a: $(objs)
+	@echo "CC $@"
+	@ar rcs libuthread.a $^
 
-uthread.o: uthread.c uthread.h context.h preempt.h queue.h
-	gcc -Werror -c -o $@ uthread.c
-
-semaphore.o: semaphore.c semaphore.h preempt.h queue.h uthread.h
-	gcc -Werror -c -o $@ semaphore.c
-
-preempt.o: preempt.c preempt.h uthread.h
-	gcc -Werror -c -o $@ preempt.c
-
-bitmap.o: bitmap.c bitmap.h
-	gcc -Werror -c -o $@ bitmap.c
+%.o: %.c %.h
+	@echo "CC $@"
+	@$(CC) $(CFLAGS) -c -o $@ queue.c
 
 clean :
-	rm -f queue.o context.o uthread.o semaphore.o preempt.o
+	@echo "CLEAN"
+	@rm -f $(targets) $(objs)
