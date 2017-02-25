@@ -22,9 +22,9 @@ static inline void set_bit(int nr, volatile unsigned char *map)
 	unsigned char *p = ((unsigned char*)map) + BIT_WORD(nr);
 	sigset_t level;
 
-	preempt_save(&level);
+	//preempt_save(&level);
 	*p |= mask;
-	preempt_restore(&level);
+	//preempt_restore(&level);
 }
 
 static inline void clr_bit(int nr, volatile unsigned char *map)
@@ -33,9 +33,9 @@ static inline void clr_bit(int nr, volatile unsigned char *map)
 	unsigned char *p = ((unsigned char*)map) + BIT_WORD(nr);
 	sigset_t level;
 
-	preempt_save(&level);
+	//preempt_save(&level);
 	*p &= ~mask;
-	preempt_restore(&level);
+	//preempt_restore(&level);
 }
 
 int check_bit(int nr, volatile unsigned char *map){
@@ -55,10 +55,6 @@ struct bitmap {
 	unsigned char* memory;
 };
 
-unsigned char * getMemory(bitmap_t bitmap){
-	return bitmap->memory;	
-}
-
 bitmap_t bitmap_create(size_t nbits)
 {
 	bitmap_t newBitMap = malloc(sizeof(bitmap_t));
@@ -66,7 +62,7 @@ bitmap_t bitmap_create(size_t nbits)
 		return NULL;
 	newBitMap->size = nbits;
 	newBitMap->size_avail = nbits;
-	newBitMap->memory = malloc(BITS_TO_BYTES(nbits) * sizeof(unsigned char *));
+	newBitMap->memory = malloc(BITS_TO_BYTES(nbits) * sizeof(unsigned char));
 	int k = 0;
 	while (k++ != nbits)
 		clr_bit(k, (newBitMap->memory));
@@ -132,6 +128,7 @@ int bitmap_set(bitmap_t bitmap, size_t pos, size_t nbits)
 		return -1;
 	if (bitmap->size_avail < nbits) //not enough bits available
 		return -1;
+	
 	size_t i = 0;
 	for(i = pos + nbits - 1; i >= pos; i--)	{
 		bitmap_set_one(bitmap, i);
@@ -182,13 +179,13 @@ int bitmap_find_region(bitmap_t bitmap, size_t count, size_t *pos)
 			if (bits_avail == count) { //we have a region with enough bits to set
 				bitmap_set(bitmap, i, count); //count,&(bitmap->memory[i]));
 				*pos = i+1-count;
-				return 0;
+				return 1;
 			}
 		}
 		else {
 			bits_avail = 0; //found a set bit, restart at 0
 		}
 	}
-	return -1; //we didn't find a region with enough bits to set
+	return 0; //we didn't find a region with enough bits to set
 }
 

@@ -34,7 +34,7 @@ void *tls_alloc(size_t size);
  */
 int tls_free(void *ptr);
 
-#ifdef _UTHREAD_PRIVATE
+//#ifdef _UTHREAD_PRIVATE
 
 /*
  * tls_open - Open the TLS area of the calling thread
@@ -46,6 +46,6 @@ void tls_open(void);
  */
 void tls_close(void);
 
-#endif /* UTHREAD_PRIVATE */
+//#endif /* UTHREAD_PRIVATE */
 
 #endif /* _TLS_H */

@@ -14,6 +14,16 @@
 typedef void (*uthread_func_t)(void *arg);
 
 /*
+ * uthread_mem_config - Configure the number of available memory pages
+ * @npages: Number of available memory pages
+ *
+ * This function should only be called by the main() function of the
+ * application, prior to calling uthread_start(), in order to configure the
+ * number of available memory pages.
+ */
+void uthread_mem_config(size_t npages);
+
+/*
  * uthread_start - Start the thread system
  * @start: Function of the first thread to start
  * @arg: Argument to be passed to the first thread
@@ -84,6 +94,18 @@ void uthread_block(void);
  */
 void uthread_unblock(struct uthread_tcb *uthread);
 
-#endif /* UTHREAD_PRIVATE */
+/*
+ * uthread_get_tls - Get TLS pointer of currently running thread
+ *
+ * Return: Pointer to current thread's TLS
+ */
+void *uthread_get_tls(void);
+
+/*
+ * uthread_set_tls - Set TLS pointer for currently running thread
+ */
+void uthread_set_tls(void *tls);
+
+#endif /* _UTHREAD_PRIVATE */
 
 #endif /* _THREAD_H */

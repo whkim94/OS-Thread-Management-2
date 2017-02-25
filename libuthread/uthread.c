@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-//#define _UTHREAD_PRIVATE
+#define _UTHREAD_PRIVATE
 #include "context.h"
 #include "palloc.h"
 #include "preempt.h"
@@ -31,6 +31,7 @@ struct uthread_tcb {
     int state;
     uthread_ctx_t context;
     void* tstack;
+    void* threadtls;
 };
 
 void schedule(void)
@@ -53,35 +54,26 @@ void uthread_yield(void)
 void uthread_exit(void)
 {
 	current_thread->state = ZOMBIE;
+	palloc_destroy();
 	schedule();
 }
 
 void uthread_block(void)
 {
-	/* TODO Phase 2 */
-	/*
-	 * uthread_block - Block currently running thread
-	 */
-
 }
 
 void uthread_unblock(struct uthread_tcb *uthread)
 {
-	/* TODO Phase 2 */
-	/*
-	 * uthread_unblock - Unblock thread
-	 * @uthread: TCB of thread to unblock
-	 */
 }
 
 void *uthread_get_tls(void)
 {
-	/* TODO: PART 2 - Phase 3 */
+	return current_thread->threadtls;
 }
 
 void uthread_set_tls(void *tls)
 {
-	/* TODO: PART 2 - Phase 3 */
+ 	current_thread->threadtls = tls;
 }
 
 struct uthread_tcb *uthread_current(void)
@@ -106,9 +98,7 @@ int uthread_create(uthread_func_t func, void *arg)
 void uthread_start(uthread_func_t start, void *arg)
 {
 	ready = queue_create();
-
 	struct uthread_tcb* idleThread;
-
 	idleThread = malloc(sizeof(struct uthread_tcb));
 	idleThread->state = RUNNING;
 
@@ -118,10 +108,17 @@ void uthread_start(uthread_func_t start, void *arg)
 		printf("Error\n");
 		exit(1);
 	}
+	int status = palloc_create();
+	if(status == -1)
+		printf("We Fail\n");
 
+	printf("We Pass\n");
+	
 	while(1) {
-		if(queue_length(ready) == 0)
+		if(queue_length(ready) == 0) {
+			palloc_destroy();
 			break;
+		}
 		uthread_yield();
 	}
 }

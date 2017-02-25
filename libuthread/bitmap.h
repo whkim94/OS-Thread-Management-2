@@ -13,7 +13,6 @@
  */
 typedef struct bitmap* bitmap_t;
 
-unsigned char * getMemory(bitmap_t bitmap);
 /*
  * bitmap_create - Allocate a bitmap
  * @nbits: Number of bits that the bitmap should contained
