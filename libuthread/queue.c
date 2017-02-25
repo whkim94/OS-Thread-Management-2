@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
-#include <queue.h>
+#include "queue.h"
 #include <stdio.h>
 #include <unistd.h>
 //we are using a linked list to construct our queue
