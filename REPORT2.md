@@ -2,8 +2,9 @@
 
 ### thread API updates
 1. We've updated our structure of TCB so that it includes a private TLS structure.
-2. get_tls(): we return the tls of the thread
+2. get_tls(): we return the TLS of the thread
 3. set_tls(): we set the TLS of the thread to the parameter passed in
+4. uthread_start(): In addition to project2, we also use palloc_create() at the start and use palloc_destroy() when we are done with all threads
 
 ### bitmap API
 
