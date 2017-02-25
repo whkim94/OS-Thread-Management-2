@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#ifdef _UTHREAD_PRIVATE
+//#ifdef _UTHREAD_PRIVATE
 
 /*
  * preempt_start - Start thread preemption
@@ -39,8 +39,8 @@ void preempt_disable(void);
  */
 bool preempt_disabled(void);
 
-#else
-#error "Private header, can't be included from applications directly"
-#endif
+//#else
+//#error "Private header, can't be included from applications directly"
+//#endif
 
 #endif /* _PREEMPT_H */
