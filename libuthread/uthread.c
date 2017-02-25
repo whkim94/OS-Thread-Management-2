@@ -110,9 +110,7 @@ void uthread_start(uthread_func_t start, void *arg)
 	}
 	int status = palloc_create();
 	if(status == -1)
-		printf("We Fail\n");
-
-	printf("We Pass\n");
+		return;
 	
 	while(1) {
 		if(queue_length(ready) == 0) {
