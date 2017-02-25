@@ -1,5 +1,10 @@
 # Project 3
 
+### thread API updates
+1. We've updated our structure of TCB so that it includes a private TLS structure.
+2. get_tls(): we return the tls of the thread
+3. set_tls(): we set the TLS of the thread to the parameter passed in
+
 ### bitmap API
 
 ##### main functions
@@ -26,6 +31,11 @@
 5. protect_pages(): we used mprotect() to set the memory protection as @prot
 
 ### tls API
+1. We maintain a linked list of node to keep track of all the TLS space allocated, and it contains the following variables:
+  - startpos: the starting position of the space in our map of what bytes are available
+  - ndata: the starting address of the actual data for TLS
+  - pageNum: the amount of bytes that this block allocates
+  - next: a pointer to the next TLS space allocated
 1. In our tls structure, we have the following variables
   - blocks: the map of what bytes are available
   - blockSize: the amount of pages allocated for tls
@@ -40,8 +50,8 @@
 5. close():
 6. alloc():
   1. we check inside blocks to see if there's enough space to allocate @size Bytes
-  2. if there is, then we return the address of (addr+index of free space found)
+  2. if there is, We add that space to the linked list, then we return the address of (addr+index of free space found)
 7. free():
-  1. we check if the address is in the list of allocated blocks
+  1. we check if the address is in the linked list of allocated blocks
     - if not, return -1
-    - if yes, clear the record in blocks and return 0
+    - if yes, clear bytes in blocks to make them available again and return 0
